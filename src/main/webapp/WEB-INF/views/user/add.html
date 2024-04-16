@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!-- nomear esse div como fragmento como corpo -->
+    <div class="container" th:fragment="corpo">
+        <h1 th:text="#{titulo.cadastro}"></h1>
+        <hr>
+        <div>
+    <!--     o component th:object="" deve ter como valor uma expressão com um objeto que o controller está esperando nesse caso objeto usuario -->
+            
+<!--         como está utilizando mesmo formulario para inserir e alterar e no controller tem um metodo para cada uma dessas operações
+        vai ser preciso ter 2 URLs no th:action  usa uma condição para saber qual url vai trabalhar   -->
+            <form th:action="${usuario.id == null} ? @{/usuario/save} : @{/usuario/update}"  th:object="${usuario}" method="post">
+<!--        ao enviar os dados para o formulario vai ser preciso recuperar e armazenar no formulario o valor referente ao id do usuario
+       por que é importante na operação de update quando trabalha com Hibernate que tenha o id do objeto está sendo alterado 
+       utilizar um input do tipo hidden para armazenar o id do usuario que está sendo alterado, para atribuir o valor do id no hidden 
+       vai utilizar a tag th:field colocando dentro da chaves o id  -->
+                <input type="hidden" th:field="*{id}"/>
+                <div class="form-group">
+<!--                 para vincular o label com input usa o th:for, usa o th:field para que possa enviar os dados a partir do objeto 
+					usuario dentro do parenteses coloca o atributo que tem lá na classe de usuario
+					 -->
+                    <label th:for="nome">Nome: </label>
+                    <input type="text" class="form-control" id="nome" th:field="*{nome}"/>
+    <!--            faz a validação apra ver se houve algum problema referente a validação especificamente do campo nome 
+                    expressão #fields e no metodo hasErrors informa o nome do campo do objeto usuario que esta testando 
+                    se houve algum problema na validação ou não
+                    th:errors responsavel por exibir a mensagem de validação se o th:if for verdadeiro -->
+                    <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="label label-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="sobrenome">Sobrenome: </label>
+                    <input type="text" class="form-control" id="sobrenome" th:field="*{sobrenome}"/>
+                    <span th:if="${#fields.hasErrors('sobrenome')}" th:errors="*{sobrenome}" class="label label-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="dtNascimento">Data de Nascimento: </label>
+                    <input type="date" class="form-control" id="dtNascimento" th:field="*{dtNascimento}" />
+                    <span th:if="${#fields.hasErrors('dtNascimento')}" th:errors="*{dtNascimento}" class="label label-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="sexo">Sexo: </label>
+                    <select th:field="*{sexo}" class="form-control" id="sexo" >
+                        <option th:each="sexo : ${sexos}" th:value="${sexo.desc}" th:text="${sexo.desc}">F</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</html>

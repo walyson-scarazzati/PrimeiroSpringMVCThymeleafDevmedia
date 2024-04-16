@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DevMedia</title>
+<!--     faz o import do boostrap -->
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}"/>
+</head>
+<body>
+<!-- os :: cabecalho irá especificar qual o fragmento da página header.html que será adicionado. 
+Dessa vez, como estamos usando o th:replace, o fragmento não irá apenas substituir a tag <span>, 
+mas também a própria tag <div>, ou seja, esse <div> será substituído pelo <div> do fragmento -->
+    <div th:replace="fragmentos/header :: cabecalho">
+        <span>carrega fragmento do cabecalho</span>
+    </div>
+<!-- adicionar o tipo de class como container por que como vai usar o include vai pegar apenas o conteudo da tag div
+que tem nas classes, o div referente ao container não viria junto, então precisa adicionar aqui na instrução na classe
+para que ele não perca o layout do Bootstrap, a variavel conteudo ela vai avisar ao controller qual página ele vai abrir
+o controller sempre for abrir uma pagina ele vai abrir a pagina de layout por que essa pagina contem as 3 partes que formam
+uma única página, só quando ele abre a pagina de layout para que apareça o conteudo tem que dizer quais das duas (add.html e list.html)
+paginas referente ao conteudo quer incluir na tag div vai criar no controller uma variavel chamada conteudo de qual pagina o fragmento 
+corpo deve ser carregado nesse div. 
+se a pagina de layout não for retornada como  resposta pelo controller não vai dar certo, pois antes ele retornava list.html e add.html
+só que essas 2 páginas foi removido os conteudos referentes ao rodapé e cabeçalho-->
+    <div class="container" th:include="${conteudo} :: corpo">
+        <span>o conteudo sera inserido aqui!</span>
+    </div>
+<!--   Fragmentos é o diretorio onde tem a pagina e footer é a página nesse caso não utilizou os 2 (dois) :(pontos) 
+  como nome do fragmento por que lá na pagina footer.html não chegou nomear o trecho de codigo como 
+  fragmento, não é obrigado nomea-lo normalmente nomea quando tem varios trechos de códigos que pode ter 
+  cada um desses trechos de codigo com nome diferente por que teria um fragmento diferente
+  nesse caso aqui é opcional -->
+    <footer class="footer" th:insert="fragmentos/footer">
+        <span>O rodapé será inserido aqui!</span>
+    </footer>
+</body>
+</html>

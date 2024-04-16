@@ -1,0 +1,104 @@
+<!-- incluir os recursos do thymeleaf para ler objetos que vem do controller como resposta para essa p�gina
+� necessario obter acesso ao componentes thymeleaf, � necessario incluir um namespace coloca no html xmlns:th="http://www.thymeleaf.org" -->>
+<!-- Com o thymeleaf voc� pode adicionar dados fict�cios na sua p�gina e depois, com recursos do thymeleaf na p�gina, 
+eles podem ser sobrescritos essa � uma boa maneira para que possa trabalhar com webdesigner -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!-- nomear esse div como fragmento como corpo  -->
+    <div class="container" th:fragment="corpo">
+ <!--    esse texto � obtido no messages.properties -->
+        <h1 th:text="#{titulo.listagem}"></h1>
+        <hr>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+<!-- se a url estiver presente na pagina vai conseguir enviar essa requisi��o obter essa resposta, como foi adicionado na tabela os recursos do thymeleaf para receber uma resposta e listar os dados isso esta acontecendo 
+o que precisa fazer aqui utilizar nesse combobox os recursos do thymeleaf tanto para enviar solicita��o como para listar dados que s�o referentes ao tipo de sexo 
+action � o atributo com a URL a qual vai enviar solicita��o ao adicionar o recurso th n�o precisa incluir na URL o contexto da aplica��o que nesse caso �
+into-spring-thymeleaf, quando leva para produ��o tira o into-spring-thymeleaf s� trabalha com o contexto raiz que � a partir da /(barra) depois do site 
+da sua empresa ao usar o thymeleaf n�o precisa fazer isso adiciona o @ como valor seguida {} colocando o controller /usuario e  /sexo para acessar o metodo
+assim o thymeleaf gerencia automaticamente o contexto 
+-->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <form class="navbar-form navbar-left" th:action="@{/usuario/sexo}" method="get">
+                        <div class="form-group">
+                            <select name="tipoSexo" class="form-control" >
+                                <option value="">Busca por Sexo</option>
+<!--   th:value coloca o valor quer enviar para a controller quando usuario selecionar o tipo de sexo no combobox
+                                th:text exibe o tipo de sexo agora ele l� a partir da array que o controller nos enviou-->
+                                <option th:each="sexo : ${sexos}" th:value="${sexo.desc}" th:text="${sexo.desc}">F</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Localizar</button>
+                    </form>
+<!--  Anota��o @RequestParam do SpringMVC vai procurar no objeto de requisi��o por uma variavel chamada nome, essa variavel chamada nome declara no atributo name,
+ ent�o quando declara um valor para atributo name esse valor passa ser uma variavel dentro do objeto de solicita��o  -->
+                    <form class="navbar-form navbar-left" role="search" th:action="@{/usuario/nome}" method="get">
+                        <div class="form-group">
+                            <input name="nome" type="text" class="form-control" placeholder="nome">
+                        </div>
+                        <button type="submit" class="btn btn-default">Localizar</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+<!-- 		trabalhando com testes condicionais utilizando thymeleaf dentro da express�o coloca a express�o referente a strings utiliza o metodo isEmpty, vai verificar se a variavel est� recebendo do controller est� vazia ou n�o
+		se a mensagem estiver vazia escreve o panel panel-default como valor do atributo class assim ficando cinza, sen�o o atributo de mensagem n�o estiver vazio
+		escreve no atributo class o valor panel panel-success fazendo a cor do cabe�alho ficar verde -->
+        <div th:class="${#strings.isEmpty(message)} ? 'panel panel-default' : 'panel panel-success'">
+
+            <div class="panel-heading">
+<!--             onde vai exibir a mensagem de confirma��o vai trocar cor do cabe�alho da tabela que atualmente est� cinza para verde, cor cinza vai continuar quando nenhuma mensagem estiver sendo exibida
+            no cabe�alho da tabela, quando a mensagem for exibida troca do cinza para o verde 
+            s� exibe a mensagem se existir um valor  na variavel de mensagem, caso n�o existir vai exibir vazio -->
+                <span th:text="${#strings.isEmpty(message)} ? '' : ${message}"> </span>
+            </div>
+
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOME</th>
+                        <th>DATA</th>
+                        <th>SEXO</th>
+                        <th>A��O</th>
+                    </tr>
+                </thead>
+                <tbody>
+        <!--          thymeleaf oferece uma propriedade do tipo th, sempre que for utilizar um recurso do thymeleaf sempre vai come�ar com th dois pontos em seguida o recurso
+                 o controller esta enviando uma lista em uma variavel chamada usuarios para que tenha acesso a essa variavel usa express�o ${} e dentro das chaves o nome da variavel 
+                 coloca na frente dessa variavel outra variavel que vai representar cada um dos usuarios dessa lista  -->
+                    <tr th:each="u : ${usuarios}">
+                    <!-- th:text para escrever valores nas p�ginas como valor de text adiciona variavel u para ler o valor referente ao dado que a gente quer ler  -->
+                        <td th:text="${u.id}">1</td>
+<!--                         para concatenar o nome e sobrenome  utiliza um recurso baseado em expressoes da Thymeleaf junto ao Spring MVC 
+ dentro da express�o ${} adiciona outra express�o # que vai fazer uma chamada ao m�todo coloca o sustenido # seguido da uma 
+ opera��o nomeada strings ser para trabalhar com qualquer opera��o baseados em dados do formato String tem um metodo chamado concat
+ utilizado para concatenar valores do tipo string, esse strings vai ter outros varios strings  podera utilizar vai poder conhecer lendo a documenta��o  
+ como parametro coloca o nome e sobrenome, o metodo concat trabalha como fosse um array cada posi��o que come�a da esquerda vai para direita  � uma posi��o dentro 
+ desse array onde vai inserir as Strings que quer concatenar exemplo na posi��o 0 coloca o nome, colocou espa�o para separar o nome do sobrenome -->
+                        <td th:text="${#strings.concat(u.nome, ' ', u.sobrenome)}">Ana Maria Junqueira Silva</td>
+<!--                         esse recurso temporals � proviniente da biblioteca  que foi adicionado na biblioteca do pom.xml referente ao java 8, 
+                        para trabalhar com localDate s� utilizando esse recurso para que possa formatar a data na sua p�gina
+                        como parametro passa o objeto que quer formatar, no segundo uma string com a express�o quer formatar essa data na p�gina 
+                        -->
+                        <td th:text="${#temporals.format(u.dtNascimento, 'dd/MM/yyyy')}">01/02/1998</td>
+                        <td th:text="${u.sexo.desc}">F</td>
+                        <td>
+                            <a class="btn btn-info" th:href="@{/usuario/update/{id}(id=${u.id})}">Editar</a>
+                            
+<!-- quando clicar nesse bot�o uma requisi��o deve ser enviada para o controller nessa requisi��o como parte do path da URL deve enviar tambem o id do usu�rio 
+o atributo href o valor desse atributo � uma URL utilizada para acessar o controller usuario, metodo delete junto tem o valor do id para seja excluido para que o usuario que tenha esse id seja excluido do banco dados 
+{id} � uma variavel concatenada a URL, para que pega esse valor e atribuia a essa variavel utiliza outro recurso da thymeleaf, funciona da seguinte forma
+ap�s declara��o dessa variavel id abre e fecha parenteses dentro dele declara o mesmo nome da variavel que est� na URL  ou seja id coloca o simbolo de 
+atribui��o e recupera o valor de id que est� na variavel de usuarios, dessa forma o id que est� na variavel de usuario � atribuido ao id que declarou dentro 
+do parenteses        
+Repara que o thymeleaf vai substituir o texto excluir pelo deletar pois est� com marca��o Thymeleaf
+-->   
+                 
+                            <a class="btn btn-danger" th:href="@{/usuario/delete/{id}(id=${u.id})}" th:text="Deletar">Excluir</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</html>

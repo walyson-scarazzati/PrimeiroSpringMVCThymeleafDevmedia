@@ -1,0 +1,13 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!-- usamos o componente th:fragment e nomeamos o fragmento como cabecalho. Desta forma, só o que faz parte da tag
+ que possui th:fragment será inserido em outra página e não todo o código da página, ou seja, a tag HTML não 
+ fará parte desse fragmento. -->
+    <div class="container" th:fragment="cabecalho">
+        <nav class="navbar navbar-inverse">
+            <div class="navbar-form navbar-left">
+                <a class="btn btn-default" th:href="@{/usuario/todos}">Home</a>
+                <a class="btn btn-default" th:href="@{/usuario/cadastro}">Novo Usuário</a>
+            </div>
+        </nav>
+    </div>
+</html>

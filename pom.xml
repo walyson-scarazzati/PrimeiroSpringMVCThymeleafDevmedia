@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>br.com.devmedia.curso</groupId>
+  <artifactId>intro-spring-mvc</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  	<dependencies>
+  	
+  		<!-- spring-context
+  		 Dependência responsável por fornecer os recursos referentes a contexto do Spring Framework. 
+  		 A declaração do Spring Context também vai incluir no projeto outras bibliotecas do Spring 
+  		 como o Spring Core, Spring Beans, entre outras;
+  		-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.3.8.RELEASE</version>
+		</dependency>
+		
+		<!-- spring-webmvc
+  		 Dependência responsável por incluir no projeto os recursos do Spring Web e Spring MVC.
+  		-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.3.8.RELEASE</version>
+		</dependency>
+
+		<!-- javax.servlet-api
+  		 Responsável por incluir na aplicação os recursos de Servlets, necessário para uso do Spring MVC;
+  		-->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		
+		<!-- jstl
+  			Essa dependência fornece os recursos da biblioteca JSTL;
+  		-->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<!-- javax.servlet.jsp-api
+  			Biblioteca responsável por adicionar na aplicação os recursos ligados a JavaServer Pages.
+  		-->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		
+		<!-- hibernate-validator
+  			ossibilita incorporar validação aos dados da aplicação através de uma API fácil de usar e de customizar
+  		-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.3.2.Final</version>
+		</dependency>
+
+	<!-- Fornece todos os recursos que precisa para integrar springframework qualquer framework ORM que queria trabalhar e da JPA -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-orm</artifactId>
+		<version>4.3.8.RELEASE</version>
+	</dependency>
+
+	<!-- Esse trata-se do framework ORM que é o Hibernate, ele tem o recurso da implementação, também da especificação que é a JPA -->
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>5.2.8.Final</version>
+	</dependency>
+	
+	<!-- Driver de conexão referente ao MySQL -->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.40</version>
+		<scope>runtime</scope>
+	</dependency>
+
+<!-- thymeleaf-spring4 - responsavel por fornecer as classes que são necessárias para realizar o processo de integração 
+   entre o Spring MVC e o Thymeleaf; -->
+	<dependency>
+		<groupId>org.thymeleaf</groupId>
+		<artifactId>thymeleaf-spring4</artifactId>
+		<version>3.0.9.RELEASE</version>
+	</dependency>
+	
+<!-- 	thymeleaf-extras-java8time - seu objetivo é fornecer um recurso para formatação de datas nas páginas, quando essas 
+  datas são baseadas em objetos da API Java Time. -->
+	<dependency>
+		<groupId>org.thymeleaf.extras</groupId>
+		<artifactId>thymeleaf-extras-java8time</artifactId>
+		<version>3.0.1.RELEASE</version>
+	</dependency>
+
+	</dependencies>
+	
+		<!-- 
+  			groupId: Indica ao Maven o grupo de dependências referentes ao Tomcat no qual ele vai localizar a dependência indicada na tag artifactId;
+			artifactId: O nome da dependência do Tomcat referente ao grupo indicado;
+			version: A versão da dependência do Tomcat;
+			port: A porta em que o Tomcat vai rodar. Este valor pode ser alterado para, por exemplo, 8080, 8090, 9080, ou qualquer outro;
+			path: Aqui é configurado o nome dado ao contexto da aplicação. Neste caso, a instrução captura o nome da tag finalNamee a URL base da aplicação será: http://localhost:9090/intro-spring-mvc.
+  		-->
+	
+	<build>
+		<finalName>intro-spring-mvc</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- vai fazer o download de todos arquivos necessario para startar o tomcat -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<port>9090</port>
+					<path>/${project.build.finalName}</path>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
